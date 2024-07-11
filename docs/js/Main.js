@@ -192,7 +192,8 @@ function updateIntegral() {
   if (mode==demoFunctions.length) {
     inputFunction.classList.remove("is-invalid");
     try {
-      const parsed=math.parse(inputFunction.value);
+      const func=inputFunction.value.replace(new RegExp('\\,|\\;','g'),match=>match===','?'.':',');
+      const parsed=math.parse(func);
       compiledFunction=parsed.compile();
     } catch (err) {
       compiledFunction=null;
