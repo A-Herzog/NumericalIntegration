@@ -12,9 +12,7 @@ To use numerical integration just go to
 
 You can also download numerical integration as an offline usable Windows application:
 
-<!--
 **[NumericalIntegration.exe](https://github.com/A-Herzog/NumericalIntegration/releases/latest/download/NumericalIntegration.exe)**
--->
 
 ## License
 

@@ -47,6 +47,6 @@ if (isDesktopApp) {
 } else {
   const downloadA='<a id="downloadApp" target="_blank" href="https://github.com/A-Herzog/NumericalIntegration/releases/latest/download/NumericalIntegration.exe" style="display: none;"></a>';
   const downloadButton='<button class="btn btn-primary my-1 bi-windows" onclick="document.getElementById(\'downloadApp\').click();"> '+language.GUI.downloadButton+'</button>';
-  //downloadBlock+="<p class='mt-3'>"+language.GUI.downloadLabel+"</p><p>"+downloadA+downloadButton+"</p>";
+  downloadBlock+="<p class='mt-3'>"+language.GUI.downloadLabel+"</p><p>"+downloadA+downloadButton+"</p>";
 }
 downloadInfoArea.innerHTML=downloadBlock;
