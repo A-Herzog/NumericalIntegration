@@ -253,17 +253,20 @@ function updateIntegral() {
     chartOptions.scales.x.max=maxX;
 
     const xValues=Array.from({length: plotSteps},(_,i)=>i).map(i=>minX+i/plotSteps*(maxX-minX));
+    const xyValues=xValues.map(x=>({x: x, y: calcf(x)}));
+    const minY=Math.min(0,xyValues.map(point=>point.y).reduce((x,y)=>Math.min(x,y)));
+    const maxY=xyValues.map(point=>point.y).reduce((x,y)=>Math.max(x,y));
     const f={
       type: 'line',
       label: "f(x):="+((mode<demoFunctions.length)?demoFunctions[mode].displayf:inputFunction.value),
-      data: xValues.map(x=>({x: x, y: calcf(x)})),
+      data: xyValues,
       fill: false,
       borderColor: 'green',
       borderWidth: 3,
       pointStyle: false,
     };
 
-    chartData.datasets=[f,generateBars(calcf,method,minX,maxX,steps)];
+    chartData.datasets=[f,...generateBars(calcf,method,minX,maxX,minY,maxY,steps,calcf)];
   } else {
     chartData.datasets=[];
   }
@@ -330,27 +333,41 @@ function calcApproxResult(f, method, min, max, steps) {
         sum+=(f(x1)+4*f(x2)+f(x3))/6;
       }
       break;
+    case 5: /* Monte-Carlo */
+      return monteCarloValue;
   }
   return sum*step;
 }
 
 /**
+ * Monte-Carlo value calculated in generateBars
+ * and used in calcApproxResult.
+ */
+let monteCarloValue=0;
+
+/**
  * Generates the optical representation for the numerical approximation for the integral
  * @param {Function} f Callback for calculating f(x)
  * @param {Number} method Approximation method to be used
- * @param {Number} min Minimum x value of the integration range
- * @param {Number} max Maximum x value of the integration range
+ * @param {Number} minX Minimum x value of the integration range
+ * @param {Number} maxX Maximum x value of the integration range
+ * @param {Number} minY Minimum y value of the integration range
+ * @param {Number} maxY Maximum y value of the integration range
  * @param {Number} steps Number of approximation steps
- * @returns Data set for the approximation
+ * @returns Data sets for the approximation
  */
-function generateBars(f, method, min, max, steps) {
-  const step=(max-min)/steps;
+function generateBars(f, method, minX, maxX, minY, maxY, steps) {
+  const step=(maxX-minX)/steps;
   const data=[];
+  const pointsLow=[];
+  const pointsHigh=[];
+  let pointsLowMinus=0;
+  let pointsHighMinus=0;
 
   switch (method) {
     case 0: /* Rectangle rule (reference points on the left) */
       for (let i=0;i<steps;i++) {
-        const x=min+i*step;
+        const x=minX+i*step;
         const y=f(x);
         data.push({x: x, y: 0});
         data.push({x: x, y: y});
@@ -360,7 +377,7 @@ function generateBars(f, method, min, max, steps) {
       break;
     case 1: /* Rectangle rule (reference points on the right) */
       for (let i=0;i<steps;i++) {
-        const x=min+i*step;
+        const x=minX+i*step;
         const y=f(x+step);
         data.push({x: x, y: 0});
         data.push({x: x, y: y});
@@ -370,7 +387,7 @@ function generateBars(f, method, min, max, steps) {
       break;
     case 2: /* Rectangle rule (reference points in the middle) */
       for (let i=0;i<steps;i++) {
-        const x=min+i*step;
+        const x=minX+i*step;
         const y=f(x+step/2);
         data.push({x: x, y: 0});
         data.push({x: x, y: y});
@@ -380,7 +397,7 @@ function generateBars(f, method, min, max, steps) {
       break;
     case 3: /* Trapeze rule */
       for (let i=0;i<steps;i++) {
-        const x=min+i*step;
+        const x=minX+i*step;
         const y1=f(x);
         const y2=f(x+step);
         data.push({x: x, y: 0});
@@ -392,7 +409,7 @@ function generateBars(f, method, min, max, steps) {
     case 4: /* Simpsons rule */
       const innerSteps=Math.round(plotSteps/steps);
       for (let i=0;i<steps;i++) {
-        const x=min+i*step;
+        const x=minX+i*step;
         const y1=f(x);
         const y2=f(x+step/2);
         const y3=f(x+step);
@@ -408,18 +425,54 @@ function generateBars(f, method, min, max, steps) {
         data.push({x: x+step, y: 0});
       }
       break;
+    case 5: /* Monte-Carlo */
+      for (let i=0;i<steps;i++) {
+        const x=minX+(maxX-minX)*Math.random();
+        const y=minY+(maxY-minY)*Math.random();
+        if (y<0) {
+          if (y<=f(x)) pointsLowMinus++; else pointsHighMinus++;
+        } else {
+          if (y<=f(x)) pointsLow.push({x: x, y: y}); else pointsHigh.push({x: x, y: y});
+
+        }
+      }
+      monteCarloValue=(pointsLow.length-pointsHighMinus)/steps*(maxX-minX)*(maxY-minY);
+      console.log(monteCarloValue);
+      break;
   }
 
-  return {
-    type: 'line',
-    label: language.GUI.methodName[method],
-    data: data,
-    fill: true,
-    borderColor: 'red',
-    backgroundColor: 'rgba(255,0,0,0.15)',
-    borderWidth: 1,
-    pointStyle: false,
-  };
+  if (data.length>0) {
+    /* Classical */
+    return [{
+      type: 'line',
+      label: language.GUI.methodName[method],
+      data: data,
+      fill: true,
+      borderColor: 'red',
+      backgroundColor: 'rgba(255,0,0,0.15)',
+      borderWidth: 1,
+      pointStyle: false,
+    }];
+  } else {
+    /* Monte-Carlo */
+    return [
+      {
+        type: 'scatter',
+        label: '(x,y)<=(x,f(x))',
+        data: pointsLow,
+        borderColor: 'red',
+        borderWidth: 1,
+        backgroundColor: 'rgba(255,0,0,0.15)'
+      },
+      {
+        type: 'scatter',
+        label: '(x,y)>(x,f(x))',
+        data: pointsHigh,
+        borderColor: 'grey',
+        borderWidth: 1,
+      },
+    ];
+  }
 }
 
 /**
