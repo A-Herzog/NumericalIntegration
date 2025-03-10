@@ -24,7 +24,7 @@ const languageDE={};
 lang=languageDE;
 
 lang.GUI={};
-lang.GUI.appName="Numersiche Integration";
+lang.GUI.appName="Numerische Integration";
 lang.GUI.homeURL="warteschlangensimulation.de";
 lang.GUI.imprint="Impressum";
 lang.GUI.privacy="Datenschutz";
