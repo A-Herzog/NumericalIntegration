@@ -87,6 +87,21 @@ function initGUILanguage() {
 
   /* Content */
   topInfo.innerHTML=language.GUI.topInfo;
+  diagramCopyButton.innerHTML=" "+language.GUI.copyDiagram;
+  diagramCopyButton.onclick=()=>{
+    if (typeof(ClipboardItem)!="undefined") {
+      chartCanvas.toBlob(blob=>navigator.clipboard.write([new ClipboardItem({"image/png": blob})]));
+    } else {
+      alert(language.GUI.copyDiagramError);
+    }
+  };
+  diagramSaveButton.innerHTML=" "+language.GUI.saveDiagram;
+  diagramSaveButton.onclick=()=>{
+    const element=document.createElement("a");
+    element.href=chartCanvas.toDataURL("image/png");
+    element.download="diagram.png";
+    element.click();
+  };
   selectFunctionLabel.innerHTML=language.GUI.function+":&nbsp";
   for (let i=0;i<demoFunctions.length;i++) {
     const option=document.createElement("option");
