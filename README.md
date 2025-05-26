@@ -10,9 +10,10 @@ To use numerical integration just go to
 
 ![Website status](https://img.shields.io/website?url=https%3A%2F%2Fa-herzog.github.io%2FNumericalIntegration%2F)
 
-You can also download numerical integration as an offline usable Windows application:
+You can also download numerical integration as an offline usable application:
 
-**[NumericalIntegration.exe](https://github.com/A-Herzog/NumericalIntegration/releases/latest/download/NumericalIntegration.exe)**
+* **[NumericalIntegration.exe](https://github.com/A-Herzog/NumericalIntegration/releases/latest/download/NumericalIntegration.exe)**
+* **[NumericalIntegration_Linux_MacOS.zip](https://github.com/A-Herzog/NumericalIntegration/releases/latest/download/NumericalIntegration_Linux_MacOS.zip)**
 
 ## License
 
