@@ -87,6 +87,11 @@ function initGUILanguage() {
 
   /* Content */
   topInfo.innerHTML=language.GUI.topInfo;
+  zoomInfo.innerHTML=language.GUI.zoomInfo;
+  diagramResetZoomButton.innerHTML=" "+language.GUI.resetZoom;
+  diagramResetZoomButton.onclick=()=>{
+    chart.resetZoom();
+  };
   diagramCopyButton.innerHTML=" "+language.GUI.copyDiagram;
   diagramCopyButton.onclick=()=>{
     if (typeof(ClipboardItem)!="undefined") {

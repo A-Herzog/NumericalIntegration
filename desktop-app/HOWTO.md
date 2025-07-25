@@ -3,7 +3,7 @@
 NumericalIntegration can be used as a web service.
 To use the service just go to
 
-**[a-herzog.github.io/Distributions](https://a-herzog.github.io/NumericalIntegration)**
+**[a-herzog.github.io/NumericalIntegration](https://a-herzog.github.io/NumericalIntegration)**
 
 NumericalIntegration can also be built to a exe file. Neutralinojs is used for building the standalone app.
 Follow these steps to build the stand alone app:
