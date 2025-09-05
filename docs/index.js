@@ -35,8 +35,10 @@ function start() {
   downloadBlock+="<p>"+language.GUI.downloadTableInfo+"</p>";
   downloadBlock+="<a id=\"downloadXLSX\" target=\"_blank\" href=\"./files/NumericalInegration_"+document.documentElement.lang+".xlsx\" download=\"NumericalInegration.xlsx\" title=\""+language.GUI.downloadExcel+"\" style=\"display: none;\"></a>";
   downloadBlock+="<a id=\"downloadODS\" target=\"_blank\" href=\"./files/NumericalInegration_"+document.documentElement.lang+".ods\" download=\"NumericalInegration.ods\" title=\""+language.GUI.downloadLibreOffice+"\" style=\"display: none;\"></a>";
+  downloadBlock+="<a id=\"downloadIPYNB\" target=\"_blank\" href=\"./files/NumericalInegration.ipynb\" download=\"NumericalInegration.ipynb\" title=\""+language.GUI.downloadPython+"\" style=\"display: none;\"></a>";
   downloadBlock+="<button onclick=\"document.getElementById('downloadXLSX').click();\" class=\"btn btn-primary my-1 bi-table\"> "+language.GUI.downloadExcel+"</button>\n";
   downloadBlock+="<button onclick=\"document.getElementById('downloadODS').click();\" class=\"btn btn-primary my-1 bi-table\"> "+language.GUI.downloadLibreOffice+"</button>\n";
+  downloadBlock+="<button onclick=\"document.getElementById('downloadIPYNB').click();\" class=\"btn btn-primary my-1 bi-code-slash\"> "+language.GUI.downloadPython+"</button>\n";
 
   if (isDesktopApp) {
     const footer=document.querySelector('footer');
