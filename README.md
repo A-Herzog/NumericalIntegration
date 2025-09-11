@@ -2,6 +2,8 @@
 
 Numerical integration is a web service for calculating integrals using numerical methods.
 
+[![Screenshot](Screenshot.png)](https://a-herzog.github.io/NumericalIntegration)
+
 ## Usage
 
 To use numerical integration just go to
